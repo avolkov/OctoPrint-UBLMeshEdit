@@ -96,16 +96,18 @@ class UBLMeshEditPlugin(octoprint.plugin.AssetPlugin,
             if self.skip_line:
                 self.skip_line = False
             else:
-                row = list(map(float,line.strip().split()))
-                row = [None if v != v else v for v in row] # convert NAN to None
+                row = list(map(float, line.strip().split()))
+                row = [None if v != v else v for v in row]  # convert NAN to None
                 self._logger.info('got mesh row: {0}'.format(row))
-                if self.skip_first: row = row[1:]
+                if self.skip_first:
+                    row = row[1:]
                 self.mesh_data.append(row)
 
         return line
 
     def on_atcommand_sending(self, comm, phase, cmd, params, tags=None, *args, **kwargs):
-        if cmd == 'UBLMESHEDIT': self.wait_mesh = True
+        if cmd == 'UBLMESHEDIT':
+            self.wait_mesh = True
 
     def send_command_complete_event(self):
         event = octoprint.events.Events.PLUGIN_UBLMESHEDIT_COMMAND_COMPLETE
@@ -116,8 +118,15 @@ class UBLMeshEditPlugin(octoprint.plugin.AssetPlugin,
         if self.mesh_data is None:
             data = {'result': 'no mesh'}
         else:
-            data = {'result': 'ok', 'data': self.mesh_data, 'gridSize': len(self.mesh_data), 'saveSlot': self.slot_num}
-        if self.not_ubl: data['notUBL'] = True
+            data = {
+                'result': 'ok',
+                'data': self.mesh_data,
+                'gridSize': len(self.mesh_data),
+                'colCount': len(self.mesh_data),
+                'rowCount': len(self.mesh_data[1]),
+                'saveSlot': self.slot_num}
+        if self.not_ubl:
+            data['notUBL'] = True
         self._event_bus.fire(event, payload=data)
 
     def register_custom_events(*args, **kwargs):

@@ -16,6 +16,8 @@ $(function() {
         self.pointCol = ko.observable(undefined);
         self.pointRow = ko.observable(undefined);
         self.gridSize = undefined;
+        self.rowCount = undefined;
+        self.colCount = undefined;
         self.gridData = ko.observable(undefined);
         self.saveSlot = ko.observable(undefined);
         self.waitingOK = ko.observable(false);
@@ -99,6 +101,8 @@ $(function() {
             }
 
             self.gridSize = payload.gridSize;
+            self.rowCount = payload.rowCount;
+            self.colCount = payload.colCount;
             self.gridData(payload.data);
 
             self.saveSlot(payload.saveSlot);
@@ -107,8 +111,8 @@ $(function() {
 
             var valMin = 0;
             var valMax = 0;
-            for(var row = 0; row < self.gridSize; row++) {
-                for(var col =0; col < self.gridSize; col++) {
+            for(var row = 0; row < self.rowCount; row++) {
+                for(var col =0; col < self.colCount; col++) {
                     if (self.gridData()[row][col] < valMin) valMin = self.gridData()[row][col];
                     if (self.gridData()[row][col] > valMax) valMax = self.gridData()[row][col];
                 }
@@ -119,14 +123,14 @@ $(function() {
                 var tr = $('<tr><td>&nbsp;</td></tr>');
                 tbl.append(tr);
                 
-                for (var col=0; col< self.gridSize; col++) {
+                for (var col=0; col< self.colCount; col++) {
                     var th = $(`<th>${col}</th>`);
                     tr.append(th);
                 }
             }
  
-            for (var row = 0; row < self.gridSize; row++) {
-                var dataRow = self.gridSize - 1 - row;
+            for (var row = 0; row < self.rowCount; row++) {
+                var dataRow = self.rowCount - 1 - row;
                 if (self.notUBL()) {
                     dataRow = row;
                 }
@@ -139,11 +143,11 @@ $(function() {
                     tr.append(th);
                 }
 
-                for (var col = 0; col < self.gridSize; col++) {
+                for (var col = 0; col < self.colCount; col++) {
                     var  btn = $('<button class="mesh-button" />');
                     var dataCol = col;
 
-                    var dataRow = self.gridSize - 1 - row;
+                    var dataRow = self.rowCount - 1 - row;
                     var val = self.gridData()[row][col];
                     var txt = (val!=null) ? val.toFixed(3) : '-'
 
@@ -169,9 +173,9 @@ $(function() {
                     btn.click(self.selectPoint)
                     var td = $('<td />');
                     if (row == 0) td.addClass('mesh-top');
-                    if (row == self.gridSize - 1) td.addClass('mesh-bottom');
+                    if (row == self.rowCount - 1) td.addClass('mesh-bottom');
                     if (col == 0) td.addClass('mesh-left');
-                    if (col == self.gridSize - 1) td.addClass('mesh-right');
+                    if (col == self.colCount - 1) td.addClass('mesh-right');
 
                     td.append(btn);
                     tr.append(td);
@@ -183,7 +187,7 @@ $(function() {
                 var tr = $('<tr><td>&nbsp;</td></tr>');
                 tbl.append(tr);
                 
-                for (var col=0; col< self.gridSize; col++) {
+                for (var col=0; col< self.colCount; col++) {
                     var th = $(`<th>${col}</th>`);
                     tr.append(th);
                 }
@@ -260,10 +264,10 @@ $(function() {
             gcode += `; Grid Size = ${self.gridSize}\n`;
             gcode += `; Save Slot = ${self.saveSlot()}\n`;
 
-            for(var row = 0; row < self.gridSize; row++) {
-                for(var col =0; col < self.gridSize; col++) {
+            for(var row = 0; row < self.rowCount; row++) {
+                for(var col =0; col < self.colCount; col++) {
                     var i = col;
-                    var j = self.gridSize - 1 - row;
+                    var j = self.rowCount - 1 - row;
                     if (self.notUBL()) {
                         j = row;
                     }
