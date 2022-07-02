@@ -31,3 +31,10 @@ The current mesh can also be exported to a GCode script. This script can then be
 
  - [ ] Add 'move nozzle to point' functionality
  - [ ] Handle invalid meshes?
+
+
+ ## Testing functionality
+
+ ### Non-rectangular mesh
+
+ * Test archive url -- https://github.com/avolkov/OctoPrint-UBLMeshEdit/archive/rect-mesh.zip
