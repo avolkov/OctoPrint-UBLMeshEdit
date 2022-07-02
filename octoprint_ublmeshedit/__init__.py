@@ -60,8 +60,18 @@ class UBLMeshEditPlugin(octoprint.plugin.AssetPlugin,
         if command == 'wait_command':
             self.wait_ok = True
 
-    def on_gcode_sending(self, comm, phase, cmd, cmd_type, gcode, subcode=None, tags=None, *args, **kwargs):
-        if cmd=='M420 V1 T1': self.wait_mesh = True
+    def on_gcode_sending(
+            self,
+            comm,
+            phase,
+            cmd,
+            cmd_type,
+            gcode,
+            subcode=None,
+            tags=None,
+            *args, **kwargs):
+        if cmd == 'M420 V1 T1':
+            self.wait_mesh = True
         return None
 
     def on_gcode_recieved(self, comm, line, *args, **kwargs):
